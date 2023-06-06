@@ -1,6 +1,14 @@
-import Image from 'next/image';
+'use client';
 
-export default function Home() {
+import React, { useState } from 'react';
+import { TodoObject } from './models/Todo';
+const Home: React.FC = () => {
+  const [todo, setTodo] = useState<string>('');
+  const [todos, setTodos] = useState<TodoObject[]>([]);
+  const addTodo = () => {
+    setTodos([{ id: '1', value: todo, done: false }, ...todos]);
+    setTodo('');
+  };
   return (
     <>
       <header className="bg-slate-950 p-4">
@@ -11,9 +19,22 @@ export default function Home() {
           type="text"
           placeholder="Enter a new todo"
           className="p-2 rounded mr-5 text-slate-900"
+          onChange={(e) => setTodo(e.target.value)}
+          value={todo}
         />
-        <button className="border-2 p-2 rounded">Add Todo</button>
+        <button className="border-2 p-2 rounded" onClick={() => addTodo()}>
+          Add Todo
+        </button>
+        <ul className="mt-5 ">
+          {todos.map((todo) => (
+            <li key={todo.id} className="text-3xl ml-5 cursor-pointer">
+              {todo.value}
+            </li>
+          ))}
+        </ul>
       </main>
     </>
   );
-}
+};
+
+export default Home;
